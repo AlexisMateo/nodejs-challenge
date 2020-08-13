@@ -1,4 +1,3 @@
-import Employee from "../../../api/models/Employee";
 import SignInDto from "../../../api/dtos/signin.dto";
 import { User } from "../../entities/user.entity";
 

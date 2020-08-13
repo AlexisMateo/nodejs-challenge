@@ -10,6 +10,8 @@ import { compare } from "bcrypt";
 import * as jwt from "jsonwebtoken";
 import { getManager } from "typeorm";
 import IAzureService from "../interfaces/services/azure.service.interface";
+import { CustomException } from "../../api/models/custom.execption";
+import log from "../../configuration/logger";
 
 @injectable()
 export default class AuthService implements IAuthService {
@@ -25,19 +27,30 @@ export default class AuthService implements IAuthService {
     let user = await this.userRepository.findUser(userRequest.email);
 
     if (user) {
+      log.info("User Exist")
+
       return this.tryGetToken(userRequest, user);
+
     } else {
+
+      log.info("User No Exist");
+
       return this.createUser(userRequest);
     }
   }
 
   private async createUser(userRequest: SignInDto): Promise<string> {
+    
+    log.info("creating a new User");
+    
     var newUser = new User(userRequest.email, userRequest.password);
 
     await getManager().save(newUser);
 
-    const encodedEmail = encode(userRequest.email);
-    this.azureService.SendToQueue(encodedEmail);
+
+    log.info("seding welcome email");
+
+    this.azureService.SendToQueue(encode(userRequest.email));
 
     return this.generateToken(newUser.email);
   }
@@ -47,11 +60,15 @@ export default class AuthService implements IAuthService {
     let isCorrectPass: Boolean = await compare( userRequest.password, user.password );
 
     if (!isCorrectPass) {
-      throw new Error("Oops! wrong password");
+
+      log.warn("wrong user password");
+
+      throw new CustomException("Oops! wrong password",401);
+      
     } else {
       return this.generateToken(userRequest.email);
     }
-    
+
   }
 
   private generateToken(email: string): string {

@@ -4,6 +4,7 @@ import bodyParser from "body-parser";
 import Routes from "./configuration/Routes";
 import { CreateDatabaseConnection } from "./infrastructure/databases/mysql/MysqlConnection";
 import AuthMiddleware from "./api/middleware/auth.middleware";
+import log from "./configuration/logger";
 
 class App {
   public app: express.Application;
@@ -31,7 +32,8 @@ class App {
       if (!err) {
         return next();
       }
-      res.status(err.status);
+      
+      res.status(err.statudCode || 500);
       res.send({ message: err.message || "Internal server error" });
     });
   }
@@ -39,9 +41,9 @@ class App {
   private ConnectToDatabase() {
     CreateDatabaseConnection()
       .then(() => {
-        console.log(" connection success");
+        log.info("connection success");
       })
-      .catch((error) => console.log(" connection error: ", error));
+      .catch((error) => log.error(" connection error: ", error));
   }
 }
 

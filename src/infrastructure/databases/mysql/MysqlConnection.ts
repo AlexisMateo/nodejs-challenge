@@ -10,11 +10,7 @@ const connectionConfig: ConnectionOptions = {
   username: getEnv("DB_USER"),
   password: getEnv("DB_PASSWORD"),
   database: getEnv("DB_NAME"),
-  // insecureAuth: true,
   port: 3306,
-  // ssl: true,
-  logging: ["query", "error"],
-  // extra: { insecureAuth: true },
   entities: [Entities.catalog, Entities.user],
 };
 
