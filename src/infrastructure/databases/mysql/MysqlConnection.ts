@@ -11,7 +11,9 @@ const connectionConfig: ConnectionOptions = {
   password: getEnv("DB_PASSWORD"),
   database: getEnv("DB_NAME"),
   port: 3306,
-  entities: [Entities.catalog, Entities.user],
+  entities: [Entities.catalog, Entities.user, Entities.Supplier],
+  synchronize:true,
+  logging:["error","query"]
 };
 
 export const CreateDatabaseConnection = () =>

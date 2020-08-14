@@ -2,7 +2,7 @@ import IAuthRepository from "../../domain/interfaces/repositories/auth.repositor
 import { injectable } from "inversify";
 import "reflect-metadata";
 import { User } from "../../domain/entities/user.entity";
-import { Connection } from "typeorm";
+import { Connection, Repository } from "typeorm";
 import {getManager} from "typeorm";
 import {genSalt,hash,compare} from "bcrypt";
 import * as jwt from "jsonwebtoken";

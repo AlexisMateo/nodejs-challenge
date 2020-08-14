@@ -1,6 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn, ManyToOne } from "typeorm";
+import { Supplier } from "./supplier.entity";
 
-@Entity("Catalog", { schema: "mobile-store" })
+@Entity("Catalog")
 export class Catalog {
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   id!: number;
@@ -13,4 +14,9 @@ export class Catalog {
 
   @Column("decimal", { name: "price", nullable: true, precision: 10, scale: 2 })
   price!: string | null;
+
+  @ManyToOne(type => Supplier,{eager:true})
+  @JoinColumn()
+  suppier!:Supplier
+  
 }

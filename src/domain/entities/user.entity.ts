@@ -1,7 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, JoinColumn, OneToOne, ManyToOne } from "typeorm";
 import { hashSync, genSaltSync } from "bcrypt";
+import { Supplier } from "./supplier.entity";
 
-@Entity("User", { schema: "mobile-store" })
+@Entity("User")
 export class User {
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   id!: number;
@@ -24,6 +25,10 @@ export class User {
       }
     })
   password!: string;
+
+  @ManyToOne(type => Supplier,{eager:true})
+  @JoinColumn()
+  suppier!:Supplier
 
   constructor(email:string,password:string) {
     this.email = email;

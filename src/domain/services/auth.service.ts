@@ -12,6 +12,8 @@ import { getManager } from "typeorm";
 import IAzureService from "../interfaces/services/azure.service.interface";
 import { CustomException } from "../../api/models/custom.execption";
 import log from "../../configuration/logger";
+import SupplierRepository from "../../infrastructure/repositories/supplier.repository";
+import { Supplier } from "../entities/supplier.entity";
 
 @injectable()
 export default class AuthService implements IAuthService {
@@ -43,7 +45,12 @@ export default class AuthService implements IAuthService {
     
     log.info("creating a new User");
     
+    var supliers= await new SupplierRepository().GetSuppliers();
+    var supplier:Supplier = supliers[Math.floor(Math.random() * supliers?.length)];
+
     var newUser = new User(userRequest.email, userRequest.password);
+    newUser.suppier = supplier;
+
 
     await getManager().save(newUser);
 
